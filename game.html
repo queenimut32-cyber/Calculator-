@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teka-Teki Berhitung</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background: linear-gradient(135deg, #c0e4ff, #f6d5f7);
+    }
+    #game, #intro {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      width: 300px;
+      margin: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Halaman Intro -->
+  <div id="intro">
+    <h2>Selamat Datang!</h2>
+    <p>Aku mau kenalan dulu nih~ Siapa namamu?</p>
+    <input type="text" id="playerName" placeholder="Namamu...">
+    <br>
+    <button onclick="startGame()">Mulai Game</button>
+  </div>
+
+  <!-- Game Utama -->
+  <div id="game" style="display:none;">
+    <h1>🧮 Teka-Teki Berhitung</h1>
+    <p id="welcome"></p>
+    <p class="info">Level: <span id="level">1</span> | Skor: <span id="score">0</span></p>
+    <p id="question"></p>
+    <input type="number" id="answer" placeholder="Jawabanmu...">
+    <br>
+    <button onclick="checkAnswer()">Cek Jawaban</button>
+    <p id="feedback"></p>
+  </div>
+
+  <script>
+    let level = 1;
+    let score = 0;
+    let num1, num2, operator, correctAnswer;
+
+    function startGame() {
+      const name = document.getElementById('playerName').value.trim();
+      if (name === "") {
+        alert("Masukkan namamu dulu ya~");
+        return;
+      }
+      document.getElementById('intro').style.display = "none";
+      document.getElementById('game').style.display = "block";
+      document.getElementById('welcome').textContent = "Halo " + name + "! Selamat bermain~";
+      generateQuestion();
+    }
+
+    function generateQuestion() {
+      let maxNum = level * 10;
+      num1 = Math.floor(Math.random() * maxNum) + 1;
+      num2 = Math.floor(Math.random() * maxNum) + 1;
+      operator = ['+', '-', '*'][Math.floor(Math.random() * 3)];
+      correctAnswer = eval(num1 + operator + num2);
+      document.getElementById('question').textContent = `${num1} ${operator} ${num2} = ?`;
+    }
+
+    function checkAnswer() {
+      const userAnswer = Number(document.getElementById('answer').value);
+      const feedback = document.getElementById('feedback');
+      if (userAnswer === correctAnswer) {
+        feedback.textContent = "Betul! Hebat kamu~";
+        score += 10;
+        if (score % 50 === 0) level++;
+      } else {
+        feedback.textContent = "Salah, semangat lagi ya!";
+      }
+      document.getElementById('score').textContent = score;
+      document.getElementById('level').textContent = level;
+      document.getElementById('answer').value = "";
+      generateQuestion();
+    }
+  </script>
+
+</body>
+</html>
